@@ -126,15 +126,9 @@ public class BookingController {
         if (bookingOpt.isPresent()) {
             Booking booking = bookingOpt.get();
             User user = booking.getUser();
-            Optional<Admin> loggedAdminOpt = adminService.findLoggedin();
 
-            if (loggedAdminOpt.isPresent()) {
-                Admin loggedAdmin = loggedAdminOpt.get();
                 String userEmail = user.getEmail();
-                String adminName = loggedAdmin.getFirstName();
-                String adminEmail = loggedAdmin.getEmail();
                 emailService.sendDeleteEmail(userEmail);
-            }
 
             bookingService.deleteById(id);
         }
