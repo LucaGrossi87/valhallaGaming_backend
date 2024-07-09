@@ -6,7 +6,9 @@ import it.epicode.valhallagaming.dto.stationDTO.StationEditRequest;
 import it.epicode.valhallagaming.dto.stationDTO.StationResponse;
 import it.epicode.valhallagaming.entity.Station;
 import it.epicode.valhallagaming.service.StationService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -67,12 +69,25 @@ public class StationController {
     }
 
     @PutMapping("/boards/{id}")
-    public StationResponse editBoard (@PathVariable Long id, @RequestBody StationEditRequest stationEditRequest){
-        Station station = convertToEntity(stationEditRequest);
-        station.setId(id);
-        Station updatedBoard = stationService.save(station);
-        return convertToDTO(updatedBoard);
+    public ResponseEntity<StationResponse> editBoard (@PathVariable Long id, @RequestBody StationEditRequest stationEditRequest){
+        try {
+            Station stationToUpdate = stationService.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Station not found with id: " + id));
+
+            if (stationEditRequest.getStationType() != null) {
+                stationToUpdate.setStationType(stationEditRequest.getStationType());
+            }
+            if (stationEditRequest.getSeatsTotal() != 0) {
+                stationService.updateSeatsTotal(stationToUpdate.getId(), stationEditRequest.getSeatsTotal());
+            }
+
+            Station updatedStation = stationService.save(stationToUpdate);
+            return ResponseEntity.ok(convertToDTO(updatedStation));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
+
 
     @DeleteMapping("/{id}")
     public StationDeleteResponse deleteStation (@PathVariable Long id){

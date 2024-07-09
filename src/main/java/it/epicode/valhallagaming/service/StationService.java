@@ -4,6 +4,7 @@ import it.epicode.valhallagaming.entity.Booking;
 import it.epicode.valhallagaming.entity.Station;
 import it.epicode.valhallagaming.entity.StationType;
 import it.epicode.valhallagaming.repository.StationRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -126,6 +127,15 @@ public class StationService {
         }
 
         return boardsBySeats;
+    }
+
+    public Station updateSeatsTotal(Long stationId, int newSeatsTotal) {
+        Station station = stationRepository.findById(stationId)
+                .orElseThrow(() -> new EntityNotFoundException("Station not found with id: " + stationId));
+
+        station.setSeatsTotal(newSeatsTotal);
+
+        return stationRepository.save(station);
     }
         }
 

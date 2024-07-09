@@ -6,6 +6,7 @@ import it.epicode.valhallagaming.repository.BookingRepository;
 import it.epicode.valhallagaming.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,6 +35,7 @@ public class BookingService {
 
     public void deleteById(Long id) {
         bookingRepository.deleteById(id);
+        bookingRepository.flush();
     }
 
     public List<Booking> getByDate(LocalDate date){
@@ -52,18 +54,21 @@ public class BookingService {
         return bookingRepository.findByStationId(stationId);
     }
 
+    @Transactional
     public void deleteExpiredBookingsAndUsers() {
         LocalDate today = LocalDate.now();
         List<Booking> expiredBookings = bookingRepository.findBookingsByDate(today.minusDays(1));
 
         for (Booking booking : expiredBookings) {
             User user = booking.getUser();
-            bookingRepository.deleteById(booking.getId());
+            bookingRepository.delete(booking);
 
             if (user.getBookingList().isEmpty()) {
-                userRepository.deleteById(user.getId());
+                userRepository.delete(user);
             }
         }
+
+        bookingRepository.flush();
     }
 
 }

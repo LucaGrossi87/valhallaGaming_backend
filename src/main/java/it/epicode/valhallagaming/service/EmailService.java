@@ -38,10 +38,10 @@ public class EmailService {
         try {
             helper.setTo(userEmail);
             helper.setFrom("vladsophia@hotmail.it");
-            helper.setSubject("Valhalla Gaming - Conferma Prenotazione");
+            helper.setSubject("Valhalla Gaming - Annullamento Prenotazione");
             String text = "Gentile Utente,\n"
                     + "siamo spiacenti ma la sua prenotazione è stata annullata. \n"
-                    + "Riprovi a prenotare un altra postazione o un'altra data";
+                    + "Riprovi a prenotare un'altra postazione o un'altra data";
             helper.setText(text);
             emailSender.send(message);
         } catch (MessagingException e) {
