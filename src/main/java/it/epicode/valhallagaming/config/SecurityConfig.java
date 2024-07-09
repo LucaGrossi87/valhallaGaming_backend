@@ -32,8 +32,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/bookings/boardbookingclose").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/bookings/bookingbyid").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/admins").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/admins").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/api/bookings/*").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/lans").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/lans/available").permitAll()
