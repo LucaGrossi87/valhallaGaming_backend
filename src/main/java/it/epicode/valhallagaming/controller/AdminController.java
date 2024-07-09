@@ -68,7 +68,6 @@ public class AdminController {
         if (adminCreateRequest.getRole() != Role.ADMIN) {
             throw new IllegalArgumentException("Solo gli admin possono creare collaboratori");
         }
-
         Admin admin = convertToEntity(adminCreateRequest);
         admin.setRole(Role.COLLABORATOR);
         Admin savedCollaborator = adminService.registerAdmin(admin);
