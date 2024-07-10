@@ -40,12 +40,10 @@ public class BookingService {
 
     @Transactional
     public void deleteById(Long id) {
-        System.out.println("check1");
         entityManager.flush();
         bookingRepository.deleteById(id);
         entityManager.flush();
         entityManager.clear();
-        System.out.println("check2");
     }
 
     public List<Booking> getByDate(LocalDate date){
