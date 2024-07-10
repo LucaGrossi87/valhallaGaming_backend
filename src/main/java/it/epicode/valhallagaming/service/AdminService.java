@@ -41,7 +41,6 @@ public class AdminService {
 
     public Admin registerAdmin(Admin admin) {
         String encodedPassword = passwordEncoder.encode(admin.getPassword());
-        System.out.println(encodedPassword);
         Admin newAdmin = new Admin(admin.getFirstName(), admin.getLastName(), admin.getUserName(), admin.getEmail(), encodedPassword, admin.isLoggedin(), admin.getRole());
         return adminRepository.save(newAdmin);
     }

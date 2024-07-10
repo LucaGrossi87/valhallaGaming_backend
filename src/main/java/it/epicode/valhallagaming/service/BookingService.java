@@ -4,6 +4,8 @@ import it.epicode.valhallagaming.entity.Booking;
 import it.epicode.valhallagaming.entity.User;
 import it.epicode.valhallagaming.repository.BookingRepository;
 import it.epicode.valhallagaming.repository.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,9 @@ public class BookingService {
     @Autowired
     private UserRepository userRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     public List<Booking> findAll(){
         return bookingRepository.findAll();
     }
@@ -33,9 +38,14 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
+    @Transactional
     public void deleteById(Long id) {
+        System.out.println("check1");
+        entityManager.flush();
         bookingRepository.deleteById(id);
-        bookingRepository.flush();
+        entityManager.flush();
+        entityManager.clear();
+        System.out.println("check2");
     }
 
     public List<Booking> getByDate(LocalDate date){
@@ -68,7 +78,7 @@ public class BookingService {
             }
         }
 
-        bookingRepository.flush();
+        entityManager.flush();
     }
 
 }

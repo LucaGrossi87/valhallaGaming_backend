@@ -71,6 +71,7 @@ public class BookingController {
 
     @DeleteMapping("/{id}")
     public BookingDeleteResponse deleteBooking(@PathVariable Long id) {
+        this.sendEmailDelete(id);
         bookingService.deleteById(id);
         BookingDeleteResponse response = new BookingDeleteResponse();
         response.setId(id);
@@ -122,15 +123,13 @@ public class BookingController {
 
     @PutMapping("/{id}/delete")
     public void sendEmailDelete(@PathVariable Long id) {
+
         Optional<Booking> bookingOpt = bookingService.findById(id);
         if (bookingOpt.isPresent()) {
             Booking booking = bookingOpt.get();
             User user = booking.getUser();
-
                 String userEmail = user.getEmail();
                 emailService.sendDeleteEmail(userEmail);
-
-            bookingService.deleteById(id);
         }
     }
 
