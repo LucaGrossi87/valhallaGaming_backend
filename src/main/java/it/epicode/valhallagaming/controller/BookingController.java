@@ -72,10 +72,13 @@ public class BookingController {
     @DeleteMapping("/{id}")
     public BookingDeleteResponse deleteBooking(@PathVariable Long id) {
         this.sendEmailDelete(id);
+        Booking booking = bookingService.findById(id).orElseThrow(() -> new EntityNotFoundException("Booking not found"));
+        Long userId = booking.getUser().getId();
         bookingService.deleteById(id);
         BookingDeleteResponse response = new BookingDeleteResponse();
         response.setId(id);
         response.setMessage("Booking eliminato");
+        userService.deleteById(userId);
         return response;
     }
 
@@ -116,7 +119,8 @@ public class BookingController {
                 String userEmail = user.getEmail();
                 String adminName = loggedAdmin.getFirstName();
                 String adminEmail = loggedAdmin.getEmail();
-                emailService.sendConfirmationEmail(userEmail, adminName, adminEmail);
+                String bookingDate= booking.getDate().toString();
+                emailService.sendConfirmationEmail(userEmail, adminName, adminEmail, bookingDate);
             }
         }
     }
@@ -129,7 +133,8 @@ public class BookingController {
             Booking booking = bookingOpt.get();
             User user = booking.getUser();
                 String userEmail = user.getEmail();
-                emailService.sendDeleteEmail(userEmail);
+                String bookingDate= booking.getDate().toString();
+                emailService.sendDeleteEmail(userEmail, bookingDate);
         }
     }
 

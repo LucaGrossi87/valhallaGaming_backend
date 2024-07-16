@@ -13,7 +13,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender emailSender;
 
-    public void sendConfirmationEmail(String userEmail, String adminName, String adminEmail){
+    public void sendConfirmationEmail(String userEmail, String adminName, String adminEmail, String bookingDate){
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         try {
@@ -21,7 +21,7 @@ public class EmailService {
             helper.setFrom("vladsophia@hotmail.it");
             helper.setSubject("Valhalla Gaming - Conferma Prenotazione");
             String text = "Gentile Utente,\n"
-                    + "La sua prenotazione è stata confermata da " + adminName + ".\n"
+                    + "La sua prenotazione per il " + bookingDate + " è stata confermata da " + adminName + ".\n"
                     + "Grazie per aver scelto Valhalla Gaming! \n"
                     + "Se ha bisogno di contattarci può scriverci a " + adminEmail;
             helper.setText(text);
@@ -31,16 +31,15 @@ public class EmailService {
         }
     }
 
-    public void sendDeleteEmail(String userEmail) {
+    public void sendDeleteEmail(String userEmail, String bookingDate) {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
-
         try {
             helper.setTo(userEmail);
             helper.setFrom("vladsophia@hotmail.it");
             helper.setSubject("Valhalla Gaming - Annullamento Prenotazione");
             String text = "Gentile Utente,\n"
-                    + "siamo spiacenti ma la sua prenotazione è stata annullata. \n"
+                    + "siamo spiacenti ma la sua prenotazione per il " + bookingDate + "è stata annullata. \n"
                     + "Riprovi a prenotare un'altra postazione o un'altra data";
             helper.setText(text);
             emailSender.send(message);
