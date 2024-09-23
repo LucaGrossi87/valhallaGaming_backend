@@ -32,8 +32,11 @@ public class EmailService {
     }
 
     public void sendDeleteEmail(String userEmail, String bookingDate) {
+        System.out.println("check");
         MimeMessage message = emailSender.createMimeMessage();
+        System.out.println("check");
         MimeMessageHelper helper = new MimeMessageHelper(message);
+        System.out.println("check");
         try {
             helper.setTo(userEmail);
             helper.setFrom("vladsophia@hotmail.it");
